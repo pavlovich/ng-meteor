@@ -3,9 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api) {
-	// Exports the ngMeteor package scope
-	api.export('ngMeteor', 'client');
-	
+    api.use('underscore', 'client');
 	// Files to load in Client only.
 	api.add_files([
 		// Lib Files
@@ -20,10 +18,24 @@ Package.on_use(function (api) {
 		'lib/angular-sanitize.js',
 		'lib/angular-touch.js',
 		'lib/angular-hash-key-copier.js',
+
+        //i18next main file
+        'lib/i18next.js',
+
 		// Module Files
 		'modules/ngMeteor-collections.js',
 		'modules/ngMeteor-template.js',
+
+        // ng-i18n module files
+        //'lib/ng-i18next/ng-i18next.js',
+
+        //'modules/ngMeteor-i18next.js',
+
 		// Finally load ngMeteor File
 		'ngMeteor.js'
 	], 'client');
+
+    // Exports the ngMeteor package scope
+    api.export('ngMeteor', 'client');
+
 });
