@@ -76,9 +76,9 @@ ngMeteor.config(['$interpolateProvider',
 //});
 
 // Render the named template as HTML using the 'context' param as the source for variable substitution.
-ngMeteor.renderTemplateInContext = function(templateName, context) {
+ngMeteor.renderTemplateInContext = function(templateOrName, context) {
+    var template = (typeof templateOrName === 'string') ? Template[templateOrName] : templateOrName;
     var div = document.createElement('div');
-    var template = Template[templateName];
     var component = UI.renderWithData(template, context);
     UI.insert(component, div);
     return div.innerHTML;

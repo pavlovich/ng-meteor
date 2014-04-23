@@ -43,15 +43,15 @@ angular.element(document).ready(function() {
             Template[templateKey].rendered = function(){
                 var map = ngMeteor.getFlexistrap(templateKey);
                 $.each( map, function( key, value ) {
-                    var ele = $(key);
-                    var eleArray = ele; //_.isArray(ele) ? ele : [ele];
+                    var eleArray = $(key);
                     _.each(eleArray, function(element){
                         var moduleList = _.clone(value);
-                        if (!angular.element(element).injector()){
+                        if (!element.bootstrapped && !angular.element(element).injector()){
                             angular.bootstrap(element, moduleList);
+                            element.bootstrapped = true;
                         }else {
                             angular.element(element).injector().invoke(['$compile', '$document', '$rootScope', function ($compile, $document, $rootScope) {
-                                $compile(element)($rootScope);
+                                element.replaceWith($compile(element)($rootScope));
                                 $rootScope.$digest();
                             }]);
                         }
