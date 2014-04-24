@@ -32,119 +32,119 @@
  *           console.log(i18n.t('hello'));
  *       });
  */
-angular.module('ngMeteor.i18next', []).directive('ngI18next', function ($rootScope) {
+angular.module('ngMeteor.i18next', [])
+    .directive('ngI18next', function ($rootScope) {
 
-    'use strict';
+        'use strict';
 
-    var
-        /**
-         * This will be our translation function (see code below)
-         */
-        t = null,
-        /**
-         * Default options for i18next
-         * @type {Object}
-         */
-        options = {},
-        callbacks = [],
-        translated = [];
-
-    /**
-     * Translate the string given by the ng-i18next attribute and put it into the element.
-     * @param {DOMElement} element     Element with the ng-i18next attribute
-     * @param {String} translateString The string we want to translate
-     * @param {Boolean} retranslate    Whether it is the first time we translate the element or not
-     */
-    function setText (element, translateString, retranslate) {
-
-        if (!retranslate) {
-            translated[translated.length] = function () {
-                setText(element, translateString, true);
-            };
-        }
-
-        if (t !== null) {
-
-            element.text(t(translateString));
-
-        } else {
-            /*
-             * We have to wait for i18next to initialize, so we
-             * add the string (and element) we want to translate
-             * to the callback array. It will get executed when
-             * i18next is ready.
+        var
+            /**
+             * This will be our translation function (see code below)
              */
-            callbacks[callbacks.length] = function () {
-                setText(element, translateString);
-            };
-        }
+            t = null,
+            /**
+             * Default options for i18next
+             * @type {Object}
+             */
+            options = {},
+            callbacks = [],
+            translated = [];
 
-    }
-    /**
-     * Initializes i18next
-     * @param {Boolean} reinitialization Have the options (in $rootScope) changed, so
-     *                                   we have to translate every string again?
-     */
-    function init (reinitialization) {
+        /**
+         * Translate the string given by the ng-i18next attribute and put it into the element.
+         * @param {DOMElement} element     Element with the ng-i18next attribute
+         * @param {String} translateString The string we want to translate
+         * @param {Boolean} retranslate    Whether it is the first time we translate the element or not
+         */
+        function setText (element, translateString, retranslate) {
 
-        window.i18n.init(options, function (tFunction) {
-
-            $rootScope.$broadcast('i18nextInit');
-            $rootScope.i18nextLoaded = true;
-
-            var i;
-
-            t = tFunction;
-
-            if (!reinitialization) {
-
-                for (i = 0; i < callbacks.length; i++) {
-                    callbacks[i]();
-                }
-
-                callbacks = [];
-
-            } else {
-
-                for (i = 0; i < translated.length; i++) {
-                    translated[i]();
-                }
-
+            if (!retranslate) {
+                translated[translated.length] = function () {
+                    setText(element, translateString, true);
+                };
             }
 
-        });
+            if (t !== null) {
+                element.text(t(translateString));
 
-    }
+            } else {
+                /*
+                 * We have to wait for i18next to initialize, so we
+                 * add the string (and element) we want to translate
+                 * to the callback array. It will get executed when
+                 * i18next is ready.
+                 */
+                callbacks[callbacks.length] = function () {
+                    setText(element, translateString);
+                };
+            }
 
-    $rootScope.$watch('i18nextOptions', function () {
+        }
+        /**
+         * Initializes i18next
+         * @param {Boolean} reinitialization Have the options (in $rootScope) changed, so
+         *                                   we have to translate every string again?
+         */
+        function init (reinitialization) {
 
-        options = $rootScope.i18nextOptions || options;
+            window.i18n.init(options, function (tFunction) {
 
-        // Note: !! -> make i18nextOptions a boolean (true if it is defined)
-        init(!!$rootScope.i18nextOptions);
+                $rootScope.$broadcast('i18nextInit');
+                $rootScope.i18nextLoaded = true;
 
-    });
+                var i;
 
-    return {
+                t = tFunction;
 
-        // 'A': only as attribute
-        restrict: 'A',
+                if (!reinitialization) {
 
-        link: function postLink (scope, element, attrs) {
+                    for (i = 0; i < callbacks.length; i++) {
+                        callbacks[i]();
+                    }
 
-            attrs.$observe('ngI18next', function (value) {
+                    callbacks = [];
 
-                if (!value) {
-                    // Well, seems that we don't have anything to translate...
-                    return;
+                } else {
+
+                    for (i = 0; i < translated.length; i++) {
+                        translated[i]();
+                    }
+
                 }
-
-                setText(element, value);
 
             });
 
         }
 
-    };
+        $rootScope.$watch('i18nextOptions', function () {
 
-});
+            options = $rootScope.i18nextOptions || options;
+
+            // Note: !! -> make i18nextOptions a boolean (true if it is defined)
+            init(!!$rootScope.i18nextOptions);
+
+        });
+
+        return {
+
+            // 'A': only as attribute
+            restrict: 'A',
+
+            link: function postLink (scope, element, attrs) {
+
+                attrs.$observe('ngI18next', function (value) {
+
+                    if (!value) {
+                        // Well, seems that we don't have anything to translate...
+                        return;
+                    }
+
+                    setText(element, value);
+
+                });
+
+            }
+
+        };
+
+    });
