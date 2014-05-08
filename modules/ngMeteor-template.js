@@ -2,11 +2,13 @@ var ngMeteorTemplate = angular.module('ngMeteor.template', []);
 
 ngMeteorTemplate.run(['$templateCache',
 	function($templateCache) {
-		angular.forEach(Template, function(render, name){
-			if(name.charAt(0) != "_" && name !== 'Layout'){
-               	$templateCache.put(name, ngMeteor.renderTemplateInContext(name, this));
-			}
-		});
+// TODO :: Explore possiblity of converting problematic SGI/Meteor-forms templates to either not have exceptions thrown
+//          during this precompilation phase ... or ... just rename them all to have a leading '_' in their name.
+//		angular.forEach(Template, function(render, name){
+//			if(name.charAt(0) != "_" && name !== 'Layout'){
+//               	$templateCache.put(name, ngMeteor.renderTemplateInContext(name, this));
+//			}
+//		});
 	}
 ]);
 
