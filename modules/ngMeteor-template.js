@@ -1,26 +1,13 @@
 var ngMeteorTemplate = angular.module('ngMeteor.template', []);
 
-ngMeteorTemplate.run(['$templateCache',
-	function($templateCache) {
-// TODO :: Explore possiblity of converting problematic SGI/Meteor-forms templates to either not have exceptions thrown
-//          during this precompilation phase ... or ... just rename them all to have a leading '_' in their name.
-//		angular.forEach(Template, function(render, name){
-//			if(name.charAt(0) != "_" && name !== 'Layout'){
-//               	$templateCache.put(name, ngMeteor.renderTemplateInContext(name, this));
-//			}
-//		});
-	}
-]);
-
 ngMeteorTemplate.directive('ngTemplate', ['$templateCache', '$compile',
 	function($templateCache, $compile) {
 		return {
 			restrict: 'AE',
 			scope: true,
 			link: function(scope, element, attributes) {
-				var	name = attributes.ngTemplate || attributes.name,
-					template = $templateCache.get(name);
-				if(angular.isDefined(template)){
+				var	name = attributes.ngTemplate || attributes.name
+				if(name && !_.startsWith(name, '_')){
 					element.html(ngMeteor.renderTemplateInContext(name, scope));
 					element.replaceWith($compile(element.html())(scope));
 				} else{
@@ -31,7 +18,7 @@ ngMeteorTemplate.directive('ngTemplate', ['$templateCache', '$compile',
 	}
 ]);
 
-// Re-compiles template when rendering with Iron-Router
+// Re-compiles template automatically when rendering with Iron-Router
 angular.element(document).ready(function() {
 
     ngMeteor.addFlexistrap('document', 'ngMeteor', '*', false);
