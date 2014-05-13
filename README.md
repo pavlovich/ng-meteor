@@ -21,6 +21,7 @@ ngMeteor
 - [Creating and inserting template views](https://github.com/loneleeandroo/ngMeteor#creating-and-inserting-template-views)
 - [Routing](https://github.com/loneleeandroo/ngMeteor#routing)
 - [Module Injection](https://github.com/loneleeandroo/ngMeteor#module-injection)
+- [Flexible module bootstrapping](https://github.com/loneleeandroo/ngMeteor#flexistrap)
 
 ### New Data-Binding to avoid conflict
 To prevent conflicts with Handlebars, ngMeteor has changed the default AngularJS data bindings from <code>{{foo}}</code> to <code>[[foo]]</code>. For example:
@@ -165,14 +166,12 @@ You can render this template using handlebars as you would for any other Meteor 
 
     {{> foo}}
 
-Templates will also be added to the $templateCache of the ngMeteor angular module. To invoke the template in AngularJS you could use ng-view and specify the template in the $templateCache when defining your routes using the $routeProvider or your could use the ng-template directive to render your template like this:
+Meteor templates can also be rendered in your Angular views using the ng-template directive like this:
 
     <ANY ng-template="foo"></ANY>
 
     <!--Add the ng-controller attribute if you want to load a controller at the same time.-->    
     <ANY ng-template="foo" ng-controller="fooCtrl"></ANY>
-    
-Templates with names starting with an underscore, for example "_foo", will not be put into the $templateCache, so you will not be able to access those templates using ng-template, ng-include or ng-view.
 
 ### Routing
 The [ngRoute](http://docs.angularjs.org/api/ngRoute) module developed by the AngularJS team is included in ngMeteor, which will satisfy those with simple routing needs. For example, if you want to call a template called 'foo' and a controller called 'TodoCtrl' when someone lands on your home page you would define your route like this:
@@ -212,10 +211,38 @@ Using this method, additional functionality has been provided to ngMeteor in the
 
 Feel free to make ngMeteor module smart packages, and please contact [loneleeandroo](https://github.com/loneleeandroo) if you would like your package to be listed here as well.
 
+### Flexible module bootstrapping (flexistrap)
+
+By default, the ngMeteor angular module is bootstrapped into the top level document on all routes. Since modules cannot be nested in angular, should you want to have parts of your DOM controlled by different modules you can do so using a flexible bootstrapping mechanism called flexistrap which is built in to the ngMeteor package. To use this mechanism you call ngMeteor.addFlexistrap() and provide a jQuery-like selector and an angular module name (or array of module names) as parameters. Fleximodel will then instruct angular to bootstrap the modules with the name (or names, if you provided an array of names) into the DOM elements matching the provided selector.
+
+Optionally, you can provide a path string (or array of path strings) as the 3rd parameter to addFlexistrap. This will apply your modules to the selected DOM elements only when the path(s) identified by the provided strings are being rendered. You can provide a value of '*' to apply your flexistrap configuration to all paths (this is the default behavior if this parameter is not provided).
+
+Optionally, you can provide a boolean as the 4th parameter. If this value is true, the configuration you provide will replace any existing flexistrap configuration for the given path(s) and selector. If False, it will ONLY update EXISTING configurations. If not supplied or null, it will update existing configurations or add new ones if they don't already exist.
+
+Example:
+
+Define two new modules: 'myModule' and 'yourModule':
+
+    myCoolModule = angular.module('myModule',[]);
+    yourCoolModule = angular.module('yourModule',[]);
+
+
+Remove existing (default) bootstrapping of ngMeteor on the toplevel document:
+
+    ngMeteor.removeFlexistrap(); // removes all existing flexistrap configurations for all paths and selectors.
+
+Bootstrap div with id 'xxx' with new module named 'myModule'
+
+    ngMeteor.addFlexistrap('#xxx', 'myModule')
+
+Bootstrap div with id 'yyy' with both the new module 'yourModule' and the original 'ngMeteor' module:
+
+    ngMeteor.addFlexistrap('#yyy', ['yourModule', 'ngMeteor'])
+
 
 <!---
 ### Dynamic routing
-Routes will automaticlly be created based on a template's name, however, you can override the dynamic routes by manually assigning a route using $routeProvider. The route will load that template and conditionally load a controller with the same name if it exists. You can prevent a template from creating a route by adding a "_" infront of the template name. Based on the URL, this is how you should name your templates:
+Routes will automaticlly be created based on a template's name, however, you can override the dynamic routes by manually assigning a route using $routeProvider. The route will load that template and conditionally load a controller with the same name if it exists. You can prevent a template from creating a route by adding a "_" in front of the template name. Based on the URL, this is how you should name your templates:
 
 | URL                               | Template / Controller name     | $routeParams |
 | :-------------------------------- | :----------------------------- | :----------- |
