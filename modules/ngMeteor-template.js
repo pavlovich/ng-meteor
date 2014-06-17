@@ -38,14 +38,19 @@ angular.element(document).ready(function() {
                     var eleArray = $(key);
                     _.each(eleArray, function(element){
                         var moduleList = _.clone(value);
-                        if (!element.bootstrapped && !angular.element(element).injector()){
-                            angular.bootstrap(element, moduleList);
+                      //  if (!element.bootstrapped && !angular.element(element).injector()){
+                        if(!ngMeteor.sgiInjector) {
+                            ngMeteor.sgiInjector = angular.bootstrap(element, moduleList);
                             element.bootstrapped = true;
                         }else {
-                            angular.element(element).injector().invoke(['$compile', '$document', '$rootScope', function ($compile, $document, $rootScope) {
-                                element.replaceWith($compile(element)($rootScope));
-                                $rootScope.$digest();
-                            }]);
+
+                                ngMeteor.sgiInjector.invoke(
+                                    ['$compile', '$document', '$rootScope', function ($compile, $document, $rootScope) {
+                                        $compile(element)($rootScope);
+                                        $rootScope.$digest();
+                                    }]
+                                )
+
                         }
                     });
                 });
