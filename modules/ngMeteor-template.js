@@ -54,7 +54,9 @@ angular.element(document).ready(function() {
                         }
                     });
                 });
-                oldRendered.apply(this, arguments);
+                if(oldRendered && typeof oldRendered == 'function') {
+                    oldRendered.apply(this, arguments);
+                };
                 Template[templateKey].rendered = oldRendered;
             };
             return runResult;
