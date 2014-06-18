@@ -43,9 +43,11 @@ angular.element(document).ready(function() {
                             ngMeteor.sgiInjector = angular.bootstrap(element, moduleList);
                             element.bootstrapped = true;
                         }else {
-
                                 ngMeteor.sgiInjector.invoke(
                                     ['$compile', '$document', '$rootScope', function ($compile, $document, $rootScope) {
+//                                        if($rootScope.$$childHead){
+//                                            $rootScope.$$childHead.$destroy();
+//                                        }
                                         $compile(element)($rootScope);
                                         $rootScope.$digest();
                                     }]
