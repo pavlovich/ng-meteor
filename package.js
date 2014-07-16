@@ -6,13 +6,11 @@ Package.on_use(function (api) {
     api.use('templating', 'client');
     api.use('underscore', 'client');
 
-	// Exports the ngMeteor package scope
-	api.export('ngMeteor', 'client');
-	
 	// Files to load in Client only.
 	api.add_files([
 		// Lib Files
 		    'lib/angular.js',
+            'lib/bindonce.js',
 		    'lib/angular-csp.css',
 		    'lib/angular-animate.js',
 		    'lib/angular-cookies.js',
@@ -30,4 +28,7 @@ Package.on_use(function (api) {
 		    'ngMeteor.js'
 
 	], 'client');
+
+    // Exports the ngMeteor package scope
+    api.export('ngMeteor', 'client');
 });

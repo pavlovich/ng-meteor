@@ -56,13 +56,13 @@ ngMeteor.addFlexistrap = function(selector, angularModuleNameOrArray, pathOrArra
 
     _.each(paths, function(ele){
         var pathEntry = this[ele] ? this[ele] : null;
-        if(typeof replaceFlag === 'undefined' || replaceFlag === null){
-            if(typeof pathEntry === 'undefined' || pathEntry === null){
+        if(_.isUndefined(replaceFlag) || _.isNull(replaceFlag)){
+            if(_.isUndefined(pathEntry) || _.isNull(pathEntry)){
                 pathEntry = {};
             }
         }else{
             pathEntry = {};
-            if(!replaceFlag){
+            if(replaceFlag == false){
                 return;
             }
         }
