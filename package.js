@@ -32,10 +32,11 @@ Package.on_use(function (api) {
         //'modules/ngMeteor-i18next.js',
 
 		// Finally load ngMeteor File
-		'ngMeteor.js'
+		'ng-meteor.js'
 	], 'client');
 
     // Exports the ngMeteor package scope
     api.export('ngMeteor', 'client');
+    api.export('_', 'client');
 
 });
