@@ -23,8 +23,8 @@ Package.on_use(function (api) {
         'lib/i18next.js',
 
 		// Module Files
-		'modules/ngMeteor-collections.js',
-		'modules/ngMeteor-template.js',
+		'modules/ng-meteor-collections.js',
+		'modules/ng-meteor-template.js',
 
         // ng-i18n module files
         //'lib/ng-i18next/ng-i18next.js',
