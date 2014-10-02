@@ -1,9 +1,9 @@
 {
-	"name": "ngMeteor",
+	"name": "ng-meteor",
 	"description": "The simplest no-conflict way to use AngularJS with Meteor",
-	"homepage": "https://github.com/loneleeandroo/ngMeteor",
+	"homepage": "https://github.com/pavlovich/ng-meteor",
 	"author": "Androo Lee",
-	"git": "https://github.com/loneleeandroo/ngMeteor.git",
+	"git": "https://github.com/pavlovich/ng-meteor.git",
 	"version": "0.1.19",
 	"packages": {}
 }
