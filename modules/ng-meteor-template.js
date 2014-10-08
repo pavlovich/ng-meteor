@@ -23,22 +23,22 @@ angular.element(document).ready(function() {
 
     ngMeteor.addFlexistrap('document', 'ngMeteor', '*', false);
 
-  //  if(Package['iron-router']){
+    if(Package['iron:router']){
         var oldRun = Router.run;
         Router.run = function() {
             var runResult = oldRun.apply(this, arguments);
             var templateKey = this._currentController.route.options.template ? this._currentController.route.options.template : this._currentController.route.name;
-            var oldRendered = Template[templateKey].rendered;
-            Template[templateKey].rendered = function(){
+           var oldRendered = Template[templateKey].rendered;
+            Template[templateKey].rendered = function () {
                 var map = ngMeteor.getFlexistrap(templateKey);
-                $.each( map, function( key, value ) {
+                $.each(map, function (key, value) {
                     var eleArray = $(key);
-                    _.each(eleArray, function(element){
+                    _.each(eleArray, function (element) {
                         var moduleList = _.clone(value);
-                        if (!element.bootstrapped && !angular.element(element).injector()){
+                        if (!element.bootstrapped && !angular.element(element).injector()) {
                             angular.bootstrap(element, moduleList);
                             element.bootstrapped = true;
-                        }else {
+                        } else {
                             angular.element(element).injector().invoke(['$compile', '$document', '$rootScope', function ($compile, $document, $rootScope) {
                                 angular.element(element).replaceWith($compile(element)($rootScope));
                                 $rootScope.$digest();
@@ -48,8 +48,8 @@ angular.element(document).ready(function() {
                 });
                 oldRendered.apply(this, arguments);
                 Template[templateKey].rendered = oldRendered;
-            }
+            };
             return runResult;
         };
- //   }
+    }
 });
