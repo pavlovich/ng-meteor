@@ -46,7 +46,9 @@ angular.element(document).ready(function() {
                         }
                     });
                 });
-                oldRendered.apply(this, arguments);
+                if(typeof oldRendered == 'function'){
+                    oldRendered.apply(this, arguments);
+                }
                 Template[templateKey].rendered = oldRendered;
             };
             return runResult;
