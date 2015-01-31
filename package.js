@@ -1,11 +1,16 @@
 Package.describe({
-	summary: "The simplest no-conflict way to use AngularJS with Meteor, Meteorite and Atmosphere Smart Packages."
+  name: 'sgi:ng-meteor',
+  version: '0.0.2',
+  summary: 'The simplest no-conflict way to use AngularJS with Meteor, Meteorite and Atmosphere Smart Packages.',
+  git: 'https://github.com/pavlovich/ng-meteor',
+  documentation: 'README.md'
 });
 
 Package.on_use(function (api) {
+	api.versionsFrom('METEOR@1.0.3')
     api.use('underscore', 'client');
 	// Files to load in Client only.
-	api.add_files([
+	api.addFiles([
 		// Lib Files
 		'lib/angular.js',
 		'lib/angular-csp.css',
